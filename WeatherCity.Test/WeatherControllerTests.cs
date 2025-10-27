@@ -142,7 +142,7 @@ public class WeatherControllerTests
         await Assert.ThrowsAsync<Exception>(async () =>
             await _controller.GetCityWeather(cityName));
 
-        // The exception should bubble up to the middleware
+        
     }
 
     [Theory]

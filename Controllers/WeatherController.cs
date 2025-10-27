@@ -28,23 +28,15 @@ public class WeatherController : ControllerBase
             return BadRequest("City name cannot be empty");
         }
 
-        try
+        var result = await _weatherService.GetCityWeatherAsync(cityName);
+        
+        if (result == null)
         {
-            var result = await _weatherService.GetCityWeatherAsync(cityName);
-            
-            if (result == null)
-            {
-                _logger.LogWarning("Weather data not found for city: {CityName}", cityName);
-                return NotFound($"Weather data not found for city: {cityName}");
-            }
+            _logger.LogWarning("Weather data not found for city: {CityName}", cityName);
+            return NotFound($"Weather data not found for city: {cityName}");
+        }
 
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving weather data for city: {CityName}", cityName);
-            return StatusCode(500, "An error occurred while retrieving weather data");
-        }
+        return Ok(result);
     }
 }
 

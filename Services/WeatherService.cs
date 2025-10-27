@@ -21,34 +21,26 @@ public class WeatherService : IWeatherService
 
     public async Task<WeatherCityResponse?> GetCityWeatherAsync(string cityName/*,string Units*/)
     {
-        try
+        WeatherCityResponse weatherCityResponse = new();
+
+        var geocodingData = await _openWeather.GetGeocodingDataAsync(cityName);
+        if (geocodingData == null || geocodingData.Count == 0)
         {
-            WeatherCityResponse weatherCityResponse = new();
-
-            var geocodingData = await _openWeather.GetGeocodingDataAsync(cityName);
-            if (geocodingData == null || geocodingData.Count == 0)
-            {
-                return null;
-            }
-            var location = geocodingData.First();
-
-            var weatherData = await _openWeather.GetWeatherDataByCoordinatesAsync(location.Lat, location.Lon);
-            if (weatherData == null)
-            {
-                return null;
-            }
-
-            var pollutionData = await _openWeather.GetAirPollutionDataAsync(location.Lat, location.Lon);
-
-            weatherCityResponse=CustomMapper(geocodingData, weatherData, pollutionData/*, Units*/);
-
-            return weatherCityResponse;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error fetching weather data for {cityName}: {ex.Message}");
             return null;
         }
+        var location = geocodingData.First();
+
+        var weatherData = await _openWeather.GetWeatherDataByCoordinatesAsync(location.Lat, location.Lon);
+        if (weatherData == null)
+        {
+            return null;
+        }
+
+        var pollutionData = await _openWeather.GetAirPollutionDataAsync(location.Lat, location.Lon);
+
+        weatherCityResponse=CustomMapper(geocodingData, weatherData, pollutionData/*, Units*/);
+
+        return weatherCityResponse;
     }
 
 

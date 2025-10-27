@@ -39,26 +39,9 @@ namespace WeatherCityAPI.GetWay
             {
 
                 var failedResponse = JsonSerializer.Deserialize<ServiceResultDTO>(response.Content);
-                switch (failedResponse.cod)
-                {
-                    case 400:
-                        throw new Exception("Error 400 - Bad Request. Check your API parameters.");
-
-                    case 401:
-                        throw new Exception("Error 401 - Unauthorized. Invalid API key.");
-
-                    case 404:
-                        throw new Exception("Error 404 - Not Found. City not found or invalid location.");
-
-                    case 429:
-                        throw new Exception("Error 429 - Rate Limit Exceeded. Too many requests.");
-
-                    default:
-                        if (failedResponse.cod >= 500)
-                            throw new Exception("Error 5xx - Server Error. OpenWeatherMap API server issue.");
-                        else
-                            throw new Exception($"API Error: {failedResponse.cod}");
-                }
+                     throw new Exception(failedResponse.message);
+                 
+                
             }
             return JsonSerializer.Deserialize<List<GeocodingDTO>>(response.Content);
 
@@ -76,26 +59,7 @@ namespace WeatherCityAPI.GetWay
             if (!response.IsSuccessStatusCode || string.IsNullOrEmpty(response.Content))
             {
                 var failedResponse = JsonSerializer.Deserialize<ServiceResultDTO>(response.Content);
-                switch (failedResponse.cod)
-                {
-                    case 400: 
-                        throw new Exception("Error 400 - Bad Request. Check your API parameters.");
-
-                    case 401:
-                        throw new Exception("Error 401 - Unauthorized. Invalid API key.");
-
-                    case 404:
-                        throw new Exception("Error 404 - Not Found. City not found or invalid location.");
-
-                    case 429:
-                        throw new Exception("Error 429 - Rate Limit Exceeded. Too many requests.");
-
-                    default:
-                        if (failedResponse.cod >= 500)
-                            throw new Exception("Error 5xx - Server Error. OpenWeatherMap API server issue.");
-                        else
-                            throw new Exception($"API Error: {failedResponse.cod}");
-                }
+                throw new Exception(failedResponse.message);
             }
 
             return JsonSerializer.Deserialize<OpenWeatherWeatherDTO>(response.Content);
@@ -113,26 +77,7 @@ namespace WeatherCityAPI.GetWay
             if (!response.IsSuccessStatusCode || string.IsNullOrEmpty(response.Content))
             {
                 var failedResponse = JsonSerializer.Deserialize<ServiceResultDTO>(response.Content);
-                switch (failedResponse.cod)
-                {
-                    case 400: 
-                        throw new Exception("Error 400 - Bad Request. Check your API parameters.");
-
-                    case 401:
-                        throw new Exception("Error 401 - Unauthorized. Invalid API key.");
-
-                    case 404:
-                        throw new Exception("Error 404 - Not Found. City not found or invalid location.");
-
-                    case 429:
-                        throw new Exception("Error 429 - Rate Limit Exceeded. Too many requests.");
-
-                    default:
-                        if (failedResponse.cod >= 500)
-                            throw new Exception("Error 5xx - Server Error. OpenWeatherMap API server issue.");
-                        else
-                            throw new Exception($"API Error: {failedResponse.cod}");
-                }
+                throw new Exception(failedResponse.message);
             }
 
             return JsonSerializer.Deserialize<OpenWeatherPollutionDTO>(response.Content);
